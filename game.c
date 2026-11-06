@@ -20,6 +20,13 @@ void moverPaddle(Paddle *paddle) {
 }
 
 void gerarBlocos(Bloco blocos[][COLUNAS],int fase) {
+        Color coresFileira[5] = {
+        {220, 20, 60, 255},
+        {30, 144, 255, 255},
+        {220, 20, 60, 255},
+        {30, 144, 255, 255},
+        {220, 20, 60, 255}
+    };
     srand(time(NULL));
     for (int i = 0; i < LINHAS; i++) {
         for (int j = 0; j < COLUNAS; j++) {
@@ -30,12 +37,12 @@ void gerarBlocos(Bloco blocos[][COLUNAS],int fase) {
                 LARGURA_BLOCO,
                 ALTURA_BLOCO
             };
-            blocos[i][j].cor = WHITE;
+            blocos[i][j].cor = coresFileira[i % 5];
         }
     }
 }
 
-void adicionarParticula(Particula **head, float x, float y) {
+void adicionarParticula(Particula **head, float x, float y,Color cor) {
     for (int i = 0; i < 10; i++) {
         Particula *new = (Particula *)malloc(sizeof(Particula));
         if (new == NULL) return;
@@ -44,6 +51,7 @@ void adicionarParticula(Particula **head, float x, float y) {
         new->dx = (float)(rand() % 11 - 5);
         new->dy = (float)(rand() % 11 - 5);
         new->vida = 40;
+        new->cor = cor;
         new->next = *head;
         *head = new;
     }
@@ -75,7 +83,7 @@ void atualizarParticulas(Particula **head) {
 void desenharParticulas(Particula *head) {
     Particula *atual = head;
     while (atual != NULL) {
-        DrawCircle(atual->x, atual->y, 5, WHITE);
+        DrawCircle(atual->x, atual->y, 5, Fade(atual->cor, atual->vida / 40.0f));
         atual = atual->next;
     }
 }
@@ -140,7 +148,7 @@ void moverBola(Ball *ball, Paddle *paddle, Bloco blocos[][COLUNAS], int *pontos,
                     else
                         ball->dy = -ball->dy;
 
-                    adicionarParticula(particulas, centroX, centroY);
+                    adicionarParticula(particulas, centroX, centroY, blocos[i][j].cor);
                     ativos--;
                 }
             }
@@ -151,14 +159,14 @@ void moverBola(Ball *ball, Paddle *paddle, Bloco blocos[][COLUNAS], int *pontos,
 }
 
 void desenharJogo(Ball *ball, Paddle *paddle, Bloco blocos[][COLUNAS], int pontos, Particula *particulas) {
-    DrawRectangle(paddle->x, paddle->y, paddle->largura, paddle->altura, WHITE);
-    DrawCircle(ball->x, ball->y, ball->raio, WHITE);
+    DrawRectangle(paddle->x, paddle->y, paddle->largura, paddle->altura, COR_PADDLE);
+    DrawCircle(ball->x, ball->y, ball->raio, COR_BOLA);
 
     for (int i = 0; i < LINHAS; i++)
         for (int j = 0; j < COLUNAS; j++)
             if (blocos[i][j].ativo)
-                DrawRectangleRec(blocos[i][j].rect, WHITE);
+                DrawRectangleRec(blocos[i][j].rect, blocos[i][j].cor);
 
     desenharParticulas(particulas);
-    DrawText(TextFormat("Pontos: %d", pontos), 10, 10, 20, WHITE);
+    DrawText(TextFormat("Pontos: %d", pontos), 10, 10, 20, COR_TEXTO);
 }

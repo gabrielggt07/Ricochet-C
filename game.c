@@ -101,9 +101,18 @@ void moverBola(Ball *ball, Paddle *paddle, Bloco blocos[][COLUNAS], int *pontos,
         ball->dy = -ball->dy;
 
     Rectangle rectPaddle = { paddle->x, paddle->y, paddle->largura, paddle->altura };
-    if (CheckCollisionCircleRec((Vector2){ball->x, ball->y}, ball->raio, rectPaddle))
-        ball->dy = -ball->dy;
+    if (CheckCollisionCircleRec((Vector2){ball->x, ball->y}, ball->raio, rectPaddle) && ball->dy > 0) {
+        float velocidade = fabsf(ball->dy);
+        float meio = paddle->x + paddle->largura / 2;
+        float impacto = (ball->x - meio) / (paddle->largura / 2);
+        if (impacto > 1) impacto = 1;
+        if (impacto < -1) impacto = -1;
 
+        ball->dx = impacto * velocidade * FATOR_ANGULO;
+        ball->dy = -velocidade;
+        ball->y = paddle->y - ball->raio;
+    }
+    
     int ativos = 0;
     for (int i = 0; i < LINHAS; i++) {
         for (int j = 0; j < COLUNAS; j++) {
@@ -111,6 +120,10 @@ void moverBola(Ball *ball, Paddle *paddle, Bloco blocos[][COLUNAS], int *pontos,
                 ativos++;
                 if (CheckCollisionCircleRec((Vector2){ball->x, ball->y}, ball->raio, blocos[i][j].rect)) {
                     blocos[i][j].ativo = false;
+                     if (fabsf(ball->dy) < VEL_BOLA_MAX) {
+                        ball->dx *= FATOR_ACELERACAO;
+                        ball->dy *= FATOR_ACELERACAO;
+                    }
                     *pontos += 10;
 
                     float centroX = blocos[i][j].rect.x + blocos[i][j].rect.width / 2;

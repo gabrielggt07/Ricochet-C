@@ -4,11 +4,11 @@
 #include <time.h>
 #include <math.h>
 
-void iniciarBola(Ball *ball, Paddle *paddle) {
+void iniciarBola(Ball *ball, Paddle *paddle, float velocidade) {
     ball->x = paddle->x + paddle->largura / 2;
     ball->y = paddle->y - 10;
-    ball->dx = 4;
-    ball->dy = -4;
+    ball->dx = velocidade;
+    ball->dy = -velocidade;
     ball->raio = 8;
 }
 
@@ -19,11 +19,11 @@ void moverPaddle(Paddle *paddle) {
         paddle->x += paddle->velocidade;
 }
 
-void gerarBlocos(Bloco blocos[][COLUNAS]) {
+void gerarBlocos(Bloco blocos[][COLUNAS],int fase) {
     srand(time(NULL));
     for (int i = 0; i < LINHAS; i++) {
         for (int j = 0; j < COLUNAS; j++) {
-            blocos[i][j].ativo = (rand() % 10) < 8;
+            blocos[i][j].ativo = (rand() % 10) < (7 + fase);
             blocos[i][j].rect = (Rectangle){
                 j * (LARGURA_BLOCO + 5) + 15,
                 i * (ALTURA_BLOCO + 5) + 50,

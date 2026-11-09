@@ -53,8 +53,8 @@ int main() {
                 }
             }
         }
-
-        if (ganhou && fase < FASES_MAX) {
+        bool atingiuMeta = !perdeu && !ganhou && pontos >= fase * PONTOS_POR_FASE;
+        if (fase < FASES_MAX && (ganhou || atingiuMeta)) {
             fase++;
             ganhou = false;
             lancou = false;

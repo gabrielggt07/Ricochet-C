@@ -13,6 +13,9 @@
 
 // Rebote no paddle
 #define FATOR_ANGULO 1.5f
+#define LARGURA_PADDLE 100
+#define REDUCAO_PADDLE 10
+#define LARGURA_PADDLE_MIN 50
 
 // Vidas
 #define VIDAS_INICIAIS 3

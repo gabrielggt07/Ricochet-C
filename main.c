@@ -9,7 +9,8 @@ int main() {
     SetTargetFPS(60);
 
     Ball ball;
-    Paddle paddle = { LARGURA / 2 - 50, ALTURA - 40, 100, 15, 6 };
+    float larguraBase = LARGURA_PADDLE;
+    Paddle paddle = { LARGURA / 2 - LARGURA_PADDLE / 2, ALTURA - 40, LARGURA_PADDLE, 15, 6 };
     Bloco blocos[LINHAS][COLUNAS];
     Particula *particulas = NULL;
 
@@ -57,10 +58,13 @@ int main() {
         if (fase < FASES_MAX && (ganhou || atingiuMeta)) {
             fase++;
             if(vidas < VIDAS_MAX) vidas++;
+            larguraBase = LARGURA_PADDLE - (fase - 1) * REDUCAO_PADDLE;
+            if (larguraBase < LARGURA_PADDLE_MIN) larguraBase = LARGURA_PADDLE_MIN;
+            paddle.largura = larguraBase;
             ganhou = false;
             lancou = false;
             gerarBlocos(blocos, fase);
-            paddle.x = LARGURA / 2 - 50;
+            paddle.x = LARGURA / 2 - paddle.largura / 2;
             iniciarBola(&ball, &paddle, VEL_BOLA_INICIAL + (fase - 1) * VEL_FASE);
             liberarParticulas(&particulas);
         }
@@ -69,6 +73,8 @@ int main() {
             pontos = 0;
             vidas = VIDAS_INICIAIS;
             fase = 1;
+            larguraBase = LARGURA_PADDLE;
+            paddle.largura = larguraBase;
             lancou = false;
             ganhou = false;
             perdeu = false;

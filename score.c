@@ -19,9 +19,17 @@ ScoreNode *carregarScores() {
     while (fscanf(f, "%d", &pontuacao) == 1) {
         ScoreNode *novo = (ScoreNode *)malloc(sizeof(ScoreNode));
         if (novo == NULL) break;
-        novo->pontuacao = pontuacao;
-        novo->next = head;
-        head = novo;
+    novo->pontuacao = pontuacao;
+if (head == NULL || pontuacao > head->pontuacao) {
+    novo->next = head;
+    head = novo;
+} else {
+    ScoreNode *atual = head;
+    while (atual->next != NULL && atual->next->pontuacao >= pontuacao)
+        atual = atual->next;
+    novo->next = atual->next;
+    atual->next = novo;
+}
     }
 
     fclose(f);

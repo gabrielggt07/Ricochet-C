@@ -39,16 +39,20 @@ int main() {
     bool ganhou = false;
     bool perdeu = false;
     bool scoreSalvo = false;
+    bool pausado = false;
 
     gerarBlocos(blocos, fase);
     iniciarBola(&ball, &paddle, VEL_BOLA_INICIAL);
     ScoreNode *scores = carregarScores();
 
     while (!WindowShouldClose()) {
-        if (!lancou && IsKeyPressed(KEY_SPACE))
+        if (!lancou && !pausado && IsKeyPressed(KEY_SPACE))
             lancou = true;
 
-        if (!perdeu && !ganhou) {
+        if (IsKeyPressed(KEY_P) && !perdeu && !ganhou)
+            pausado = !pausado;
+
+        if (!perdeu && !ganhou && !pausado) {
             moverPaddle(&paddle);
 
             if (lancou) {
@@ -112,7 +116,9 @@ int main() {
             DrawText(TextFormat("Vidas: %d", vidas), LARGURA - 120, 10, 20, WHITE);
             if (!lancou)
                 DrawText("Pressione ESPACO para lancar", LARGURA / 2 - 150, ALTURA / 2, 20, WHITE);
-        }
+            if (pausado)
+                DrawText("PAUSADO", LARGURA / 2 - 60, ALTURA / 2 - 40, 30, WHITE);
+            }
 
         if (ganhou) {
             if (!scoreSalvo) {

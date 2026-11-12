@@ -3,10 +3,28 @@
 #include <stddef.h>
 #include "game.h"
 #include "score.h"
+#include <stdlib.h>
+#include <time.h>
+
+static void desenharRanking(ScoreNode *scores) {
+    DrawText("--- TOP SCORES ---", LARGURA / 2 - 100, ALTURA / 2, 20, WHITE);
+
+    ScoreNode *atual = scores;
+    int y = ALTURA / 2 + 30;
+    int i = 1;
+    while (atual != NULL && i <= 5) {
+        DrawText(TextFormat("%d. %d pontos", i, atual->pontuacao), LARGURA / 2 - 80, y, 18, WHITE);
+        atual = atual->next;
+        y += 25;
+        i++;
+    }
+    DrawText("Pressione R para jogar novamente", LARGURA / 2 - 160, y + 10, 20, WHITE);
+}
 
 int main() {
-    InitWindow(LARGURA, ALTURA, "BrickC");
+    InitWindow(LARGURA, ALTURA, "Ricochet-C");
     SetTargetFPS(60);
+    srand(time(NULL));
 
     Ball ball;
     float larguraBase = LARGURA_PADDLE;
@@ -105,37 +123,14 @@ int main() {
             }
             DrawText("VOCE GANHOU!", LARGURA / 2 - 100, ALTURA / 2 - 80, 30, WHITE);
             DrawText(TextFormat("Pontos: %d", pontos), LARGURA / 2 - 60, ALTURA / 2 - 40, 20, WHITE);
-            DrawText("--- TOP SCORES ---", LARGURA / 2 - 100, ALTURA / 2, 20, WHITE);
-
-            ScoreNode *atual = scores;
-            int y = ALTURA / 2 + 30;
-            int i = 1;
-            while (atual != NULL && i <= 5) {
-                DrawText(TextFormat("%d. %d pontos", i, atual->pontuacao), LARGURA / 2 - 80, y, 18, WHITE);
-                atual = atual->next;
-                y += 25;
-                i++;
-            }
-            DrawText("Pressione R para jogar novamente", LARGURA / 2 - 160, y + 10, 20, WHITE);
+            desenharRanking(scores);
         }
 
         if (perdeu) {
             DrawText("GAME OVER", LARGURA / 2 - 80, ALTURA / 2 - 80, 30, WHITE);
             DrawText(TextFormat("Pontos: %d", pontos), LARGURA / 2 - 60, ALTURA / 2 - 40, 20, WHITE);
-            DrawText("--- TOP SCORES ---", LARGURA / 2 - 100, ALTURA / 2, 20, WHITE);
-
-            ScoreNode *atual = scores;
-            int y = ALTURA / 2 + 30;
-            int i = 1;
-            while (atual != NULL && i <= 5) {
-                DrawText(TextFormat("%d. %d pontos", i, atual->pontuacao), LARGURA / 2 - 80, y, 18, WHITE);
-                atual = atual->next;
-                y += 25;
-                i++;
-            }
-            DrawText("Pressione R para jogar novamente", LARGURA / 2 - 160, y + 10, 20, WHITE);
+            desenharRanking(scores);
         }
-
         EndDrawing();
     }
 

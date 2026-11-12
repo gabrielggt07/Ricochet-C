@@ -1,7 +1,6 @@
 #include "game.h"
 #include <stdlib.h>
 #include <stddef.h>
-#include <time.h>
 #include <math.h>
 
 void iniciarBola(Ball *ball, Paddle *paddle, float velocidade) {
@@ -27,7 +26,6 @@ void gerarBlocos(Bloco blocos[][COLUNAS],int fase) {
         {30, 144, 255, 255},
         {220, 20, 60, 255}
     };
-    srand(time(NULL));
     for (int i = 0; i < LINHAS; i++) {
         for (int j = 0; j < COLUNAS; j++) {
             blocos[i][j].ativo = (rand() % 10) < (7 + fase);

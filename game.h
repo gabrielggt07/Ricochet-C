@@ -16,6 +16,7 @@
 #define LARGURA_PADDLE 100
 #define REDUCAO_PADDLE 10
 #define LARGURA_PADDLE_MIN 50
+#define COMBO_MAX 5
 
 // Vidas
 #define VIDAS_INICIAIS 3

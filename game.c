@@ -3,7 +3,10 @@
 #include <stddef.h>
 #include <math.h>
 
+static int combo = 0;
+
 void iniciarBola(Ball *ball, Paddle *paddle, float velocidade) {
+    combo = 0;
     ball->x = paddle->x + paddle->largura / 2;
     ball->y = paddle->y - 10;
     ball->dx = velocidade;
@@ -117,6 +120,7 @@ void moverBola(Ball *ball, Paddle *paddle, Bloco blocos[][COLUNAS], int *pontos,
         ball->dx = impacto * velocidade * FATOR_ANGULO;
         ball->dy = -velocidade;
         ball->y = paddle->y - ball->raio;
+        combo = 0;
     }
     
     int ativos = 0;
@@ -130,7 +134,8 @@ void moverBola(Ball *ball, Paddle *paddle, Bloco blocos[][COLUNAS], int *pontos,
                         ball->dx *= FATOR_ACELERACAO;
                         ball->dy *= FATOR_ACELERACAO;
                     }
-                    *pontos += 10;
+                     if (combo < COMBO_MAX) combo++;
+                     *pontos += 10 + 5 * (combo - 1);
 
                     float centroX = blocos[i][j].rect.x + blocos[i][j].rect.width / 2;
                     float centroY = blocos[i][j].rect.y + blocos[i][j].rect.height / 2;
@@ -167,4 +172,6 @@ void desenharJogo(Ball *ball, Paddle *paddle, Bloco blocos[][COLUNAS], int ponto
 
     desenharParticulas(particulas);
     DrawText(TextFormat("Pontos: %d", pontos), 10, 10, 20, COR_TEXTO);
+    if (combo > 1)
+        DrawText(TextFormat("Combo x%d", combo), LARGURA - 130, 30, 18, COR_DESTAQUE);
 }

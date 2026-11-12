@@ -56,6 +56,7 @@ int main() {
         bool atingiuMeta = !perdeu && !ganhou && pontos >= fase * PONTOS_POR_FASE;
         if (fase < FASES_MAX && (ganhou || atingiuMeta)) {
             fase++;
+            if(vidas < VIDAS_MAX) vidas++;
             ganhou = false;
             lancou = false;
             gerarBlocos(blocos, fase);

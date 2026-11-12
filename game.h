@@ -16,6 +16,7 @@
 
 // Vidas
 #define VIDAS_INICIAIS 3
+#define VIDAS_MAX 5
 
 // Fases
 #define FASES_MAX 5

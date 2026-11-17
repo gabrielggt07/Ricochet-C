@@ -1,35 +1,40 @@
-CC_WIN = C:/raylib/w64devkit/bin/gcc.exe
-CC_LIN = gcc
-TOOLCHAIN_BIN = C:/raylib/w64devkit/bin/
-RAYLIB_INCLUDE = C:/raylib/w64devkit/include
-RAYLIB_LIB = C:/raylib/w64devkit/lib
-
-CFLAGS_WIN = -Wall -g -B$(TOOLCHAIN_BIN) -I$(RAYLIB_INCLUDE)
-LIBS_WIN = -L$(RAYLIB_LIB) -lraylib -lopengl32 -lgdi32 -lwinmm -lm
-
-CFLAGS_LIN = -Wall -g
-LIBS_LIN = -lraylib -lm
-
 SRCS = main.c game.c score.c
+EXE = Ricochet-C
 
-# Windows
-windows:
-	$(CC_WIN) $(CFLAGS_WIN) -o Ricochet-C.exe $(SRCS) $(LIBS_WIN)
+ifeq ($(OS),Windows_NT)
+    # Windows (w64devkit + Raylib)
+    CC = C:/raylib/w64devkit/bin/gcc.exe
+    CFLAGS = -Wall -g -BC:/raylib/w64devkit/bin/ -IC:/raylib/w64devkit/include
+    LIBS = -LC:/raylib/w64devkit/lib -lraylib -lopengl32 -lgdi32 -lwinmm -lm
+    EXE = Ricochet-C.exe
+    RUN = ./Ricochet-C.exe
+    RM = del /Q Ricochet-C.exe 2>nul || exit 0
+else
+    UNAME := $(shell uname -s)
+    RUN = ./$(EXE)
+    RM = rm -f $(EXE)
+    ifeq ($(UNAME),Darwin)
+        # macOS (brew install raylib pkg-config)
+        CC = clang
+        CFLAGS = -Wall -g $(shell pkg-config --cflags raylib)
+        LIBS = $(shell pkg-config --libs raylib) -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo -lm
+    else
+        # Linux
+        CC = gcc
+        CFLAGS = -Wall -g $(shell pkg-config --cflags raylib 2>/dev/null)
+        LIBS = $(shell pkg-config --libs raylib 2>/dev/null || echo -lraylib) -lm
+    endif
+endif
 
-run-windows:
-	./Ricochet-C.exe
+all: $(EXE)
 
-# Linux
-linux:
-	$(CC_LIN) $(CFLAGS_LIN) -o Ricochet-C $(SRCS) $(LIBS_LIN)
+$(EXE): $(SRCS) game.h score.h
+	$(CC) $(CFLAGS) -o $(EXE) $(SRCS) $(LIBS)
 
-run-linux:
-	./Ricochet-C
+run: all
+	$(RUN)
 
-# Limpar
-clean-windows:
-	del /Q Ricochet-C.exe 2>nul || exit 0
+clean:
+	$(RM)
 
-clean-linux:
-	rm -f Ricochet-C
-	
+.PHONY: all run clean

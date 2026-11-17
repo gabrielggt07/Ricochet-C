@@ -21,18 +21,25 @@ sudo apt update
 sudo apt install libraylib-dev
 ```
 
-## Compilação
+## Compilação e execução
 
-Windows (a Raylib precisa estar em `C:/raylib/w64devkit`):
+Antes de compilar, instale a Raylib.
+
+Windows (Raylib em `C:/raylib/w64devkit`):
 ```bash
-mingw32-make windows
-.\Ricochet-C.exe
+mingw32-make run
 ```
 
 Linux:
 ```bash
-make linux
-./Ricochet-C
+sudo apt install libraylib-dev pkg-config
+make run
+```
+
+macOS:
+```bash
+brew install raylib pkg-config
+make run
 ```
 
 ## Como jogar
@@ -40,7 +47,7 @@ make linux
 - Espaço: lança a bola
 - R: reinicia o jogo
 - ESC: sai do jogo
-
+- P : pausa 
 ## Estrutura do projeto
 ```
 Ricochet-C

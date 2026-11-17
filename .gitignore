@@ -53,3 +53,11 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Executáveis do jogo
+Ricochet-C
+Ricochet-C.exe
+
+# Gerados pelo jogo
+scores.txt
+output/

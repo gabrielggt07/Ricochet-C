@@ -7,6 +7,10 @@ Jogo de quebra-blocos inspirado no Arkanoid, feito em C com a biblioteca Raylib.
 - Arthur Casanova de Azevedo
 - Victor Rodrigues Tavares
 
+## Video do jogo 
+
+https://youtu.be/TfH2FfN1XKY
+
 ## Requisitos
 - GCC
 - Raylib
